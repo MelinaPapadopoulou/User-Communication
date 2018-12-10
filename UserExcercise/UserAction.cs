@@ -1,11 +1,8 @@
-﻿using Excercise1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Excercise1
 {
@@ -128,7 +125,7 @@ namespace Excercise1
             while (true)
             {
                 Console.Clear();
-                List<string> ListOfRecievers = DataProvider.ReadUsers().Select(u=>u.Username).ToList();
+                List<string> ListOfRecievers = DataProvider.ReadUsers().Select(u => u.Username).ToList();
                 ListOfRecievers.Remove(sender.Username);
                 if (IsListEmpty(ListOfRecievers))
                 {
@@ -136,10 +133,10 @@ namespace Excercise1
                 }
                 else
                 {
-                    int senderid , recieverid ;
+                    int senderid, recieverid;
                     string reciever = MainMenuSelection.VerticalMenu(ListOfRecievers, "Whom do you want to send your message to?");
                     Console.CursorVisible = false;
-                    User userReciever = DataProvider.ReadUsers().SingleOrDefault(u=>u.Username==reciever);  //varaei otan apo melina stelnw sthn allh melina gi auto prepei me ta id na tous vriskw//Update to ekana melina2 kai ola kala
+                    User userReciever = DataProvider.ReadUsers().SingleOrDefault(u => u.Username == reciever);  //varaei otan apo melina stelnw sthn allh melina gi auto prepei me ta id na tous vriskw//Update to ekana melina2 kai ola kala
                     senderid = sender.UserId;
                     recieverid = userReciever.UserId;
                     string messageText = WriteMessage();
@@ -298,6 +295,6 @@ namespace Excercise1
                 }
             }
         }
-        
+
     }
 }
