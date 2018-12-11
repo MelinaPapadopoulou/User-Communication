@@ -4,6 +4,8 @@ namespace Excercise1
 {
     internal interface IProvideData
     {
+        bool IsStorageEmpty();
+
         // Create
         bool CreateUser(User user);
         bool CreatePersonalMessage(PersonalMessage personalMessage);
@@ -20,8 +22,8 @@ namespace Excercise1
         bool UpdateUserAccess(User UserToUpdate,Privilege NewPrivilege);
 
         // Delete
-        bool DeleteSelectedUser(string UserToDelete);
-        bool DeleteSelectedPersonalMessage();
+        bool DeleteSelectedUser(User UserToDelete);
+        bool DeleteSelectedPersonalMessage(PersonalMessage personalMessage,bool IsUserSender);
         bool DeleteSelectedForumMessage();
 
     }

@@ -8,7 +8,13 @@ namespace Excercise1
 {
     class MenuSelection
     {
-        public string HorizontalMainMenu(List<string> list, string Header = "")
+        public struct UserChoice
+        {
+            public string NameOfChoice;
+            public int IndexOfChoice;
+        }
+
+        public UserChoice HorizontalMainMenu(List<string> list, string Header = "")
         {
             int index = 0;
             ConsoleKeyInfo ckey;
@@ -58,9 +64,9 @@ namespace Excercise1
                 }
                 Console.Clear();
             } while (ckey.Key != ConsoleKey.Enter);
-            return list[index];
+            return new UserChoice() { NameOfChoice = list[index], IndexOfChoice = index };
         }
-        public string VerticalMenu(List<string> list, string Header = "")
+        public UserChoice VerticalMenu(List<string> list, string Header = "")
         {
 
             Console.CursorVisible = false;
@@ -111,7 +117,7 @@ namespace Excercise1
                 }
                 Console.Clear();
             } while (ckey.Key != ConsoleKey.Enter);
-             return list[index];
+            return new UserChoice() { NameOfChoice = list[index], IndexOfChoice = index };
         }
     }
 }

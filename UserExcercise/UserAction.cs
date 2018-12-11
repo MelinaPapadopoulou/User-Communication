@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace Excercise1
@@ -38,7 +37,7 @@ namespace Excercise1
             else
             {
                 ListOfPossibleUsers.Add("Back");
-                string UserToBeUpdated = MainMenuSelection.VerticalMenu(ListOfPossibleUsers);
+                string UserToBeUpdated = MainMenuSelection.VerticalMenu(ListOfPossibleUsers).NameOfChoice;
                 User selecteduser = DataProvider.ReadUsers().Single(us => us.Username == UserToBeUpdated);
                 List<User> ListOfAllUsers = DataProvider.ReadUsers();
                 if (UserToBeUpdated == "Back")
@@ -47,19 +46,8 @@ namespace Excercise1
                 }
                 else
                 {
-                    string selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "guest", "user", "admin" }, $"Choose the privileges of {selecteduser.Username}");
-                    switch (selecteditem)
-                    {
-                        case "guest":
-                            DataProvider.UpdateUserAccess(selecteduser, Privilege.guest);
-                            break;
-                        case "user":
-                            DataProvider.UpdateUserAccess(selecteduser, Privilege.user);
-                            break;
-                        case "admin":
-                            DataProvider.UpdateUserAccess(selecteduser, Privilege.admin);
-                            break;
-                    }
+                    Privilege NewUserPrivilege = (Privilege)MainMenuSelection.VerticalMenu(new List<string> { "admin", "user" , "guest"}, $"Choose the privileges of {selecteduser.Username}").IndexOfChoice;
+                    DataProvider.UpdateUserAccess(selecteduser, NewUserPrivilege);
                 }
             }
         }
@@ -81,16 +69,17 @@ namespace Excercise1
             else
             {
                 usersList.Add("Back");
-                string userToBeDeleted = MainMenuSelection.VerticalMenu(usersList);
-                if (userToBeDeleted == "Back")
+                string userToDelete = MainMenuSelection.VerticalMenu(usersList).NameOfChoice;
+                if (userToDelete == "Back")
                 {
                     return;
                 }
                 else
                 {
-                    DataProvider.DeleteSelectedUser(userToBeDeleted);
+                    User selecteduser = DataProvider.ReadUsers().Single(us => us.Username == userToDelete);
+                    DataProvider.DeleteSelectedUser(selecteduser);
                 }
-                Console.CursorVisible = false;
+                
             }
         }
         public void ForumMessage(User sender)
@@ -107,7 +96,7 @@ namespace Excercise1
                 DataProvider.CreateForumMessage(message);
                 while (true)
                 {
-                    string selecteditem = MainMenuSelection.HorizontalMainMenu(new List<string> { "Back", "Exit" }, "Message sent!");
+                    string selecteditem = MainMenuSelection.HorizontalMainMenu(new List<string> { "Back", "Exit" }, "Message sent!").NameOfChoice;
                     switch (selecteditem)
                     {
                         case "Back":
@@ -134,7 +123,7 @@ namespace Excercise1
                 else
                 {
                     int senderid, recieverid;
-                    string reciever = MainMenuSelection.VerticalMenu(ListOfRecievers, "Whom do you want to send your message to?");
+                    string reciever = MainMenuSelection.VerticalMenu(ListOfRecievers, "Whom do you want to send your message to?").NameOfChoice;
                     Console.CursorVisible = false;
                     User userReciever = DataProvider.ReadUsers().SingleOrDefault(u => u.Username == reciever);  //varaei otan apo melina stelnw sthn allh melina gi auto prepei me ta id na tous vriskw//Update to ekana melina2 kai ola kala
                     senderid = sender.UserId;
@@ -230,7 +219,6 @@ namespace Excercise1
                 if (message.RecieverID == userid)
                 {
                     recievedMessages.Add(message.MessageText);
-                    senders.Add(message.RecieverID);
                 }
             }
             if (recievedMessages.Count == 0)
@@ -248,13 +236,13 @@ namespace Excercise1
             return;
         }
 
-        public void DeleteMessage(int userid)
+        public void DeleteMessage(User ActiveUser)
         {
             List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages();
             List<string> MessageTextList = new List<string>();
             foreach (PersonalMessage message in messageList)
             {
-                if (message.SenderID == userid || message.RecieverID == userid)
+                if ((message.SenderID == ActiveUser.UserId && message.IsMessageShownToSender) || (message.RecieverID == ActiveUser.UserId && message.IsMessageShownToReciever))
                 {
                     MessageTextList.Add(message.MessageText);
                 }
@@ -267,34 +255,23 @@ namespace Excercise1
             }
             else
             {
+                bool IsUserSender;
                 MessageTextList.Add("Back");
-                string selecteditem = MainMenuSelection.VerticalMenu(MessageTextList, "Delete any message");
-                if (selecteditem == "Back")
+                int index = MainMenuSelection.VerticalMenu(MessageTextList, "Delete any message").IndexOfChoice;
+                if (index == MessageTextList.Count - 1)
                 {
                     return;
                 }
                 else
                 {
-                    List<string> ListOfMessages = new List<string>(File.ReadAllLines(@"C:\Users\user\Desktop\Personal Messages.txt"));
-                    int userposition = 0;
-                    int line = -1;
-                    foreach (string personalMessage in ListOfMessages)
-                    {
-                        string[] messagePart = personalMessage.Split(',');
-                        if (messagePart[3] == selecteditem)
-                        {
-                            line = userposition;
-                            break;
-                        }
-                        userposition++;
-                    }
-                    ListOfMessages.RemoveAt(line);
-                    File.WriteAllLines(@"C:\Users\user\Desktop\Personal Messages.txt", ListOfMessages);
-                    Console.Write($"User {selecteditem} has been deleted succesfully!");
-                    Console.ReadKey();
+                    // Gia na apofugw thn foreach na kanw to menu na stelnei int kai oxi string
+                    if (messageList[index].SenderID == ActiveUser.UserId)
+                        IsUserSender = true;
+                    else
+                        IsUserSender = false;
+                    DataProvider.DeleteSelectedPersonalMessage(messageList[index], IsUserSender);
                 }
             }
         }
-
     }
 }

@@ -1,10 +1,7 @@
-﻿using Excercise1;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Excercise1
 {
@@ -23,12 +20,10 @@ namespace Excercise1
 
         public User LoginSignup(IProvideData DataProvider)
         {
-            string username="";
-            string pass = "";
             string startingOption;
-            startingOption = MainMenuSelection.HorizontalMainMenu(new List<string> { "Login", "SignUp","Exit" },Headers.headerw);
+            startingOption = MainMenuSelection.HorizontalMainMenu(new List<string> { "Login", "SignUp", "Exit" }, Headers.headerw).NameOfChoice;
             Console.Clear();
-            if (startingOption=="Exit")
+            if (startingOption == "Exit")
             {
                 Environment.Exit(0);
             }
@@ -38,7 +33,13 @@ namespace Excercise1
 
             if (startingOption == "SignUp")
             {
-                User u1 = new User() {Username = GivenUsername, Password = GivenPassword , UsersPrivilege = Privilege.user};
+                User u1 = new User()
+                {
+                    Username = GivenUsername,
+                    Password = GivenPassword,
+                    UsersPrivilege = DataProvider.IsStorageEmpty() ? Privilege.admin : Privilege.user
+                };
+
                 Debug.Write("New User was created successfully: " + DataProvider.CreateUser(u1));
                 return u1;
             }
@@ -53,7 +54,7 @@ namespace Excercise1
         {
             Console.Write("Password: ");
             Console.CursorVisible = true;
-            string password="";
+            string password = "";
             while (true)
             {
                 ConsoleKeyInfo passkey;

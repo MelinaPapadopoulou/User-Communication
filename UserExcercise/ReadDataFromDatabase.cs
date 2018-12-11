@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 namespace Excercise1
@@ -38,8 +39,8 @@ namespace Excercise1
                 Db.ForumMessages.Add(forumMessage);
                 return SaveData(Db);
             }
-
         }
+
         public bool SaveData(DataBaseClass Db)
         {
                 try
@@ -98,19 +99,45 @@ namespace Excercise1
             }
         }
 
-        public bool DeleteSelectedUser(string UserToDelete)
+        public bool DeleteSelectedUser(User UserToDelete)
         {
-            throw new NotImplementedException();
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                Db.Users.Remove(UserToDelete);
+                return SaveData(Db);
+            }
         }
 
-        public bool DeleteSelectedPersonalMessage()
+        public bool DeleteSelectedPersonalMessage(PersonalMessage personalmessage, bool IsUserSender)
         {
-            throw new NotImplementedException();
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                if (IsUserSender && !personalmessage.IsMessageShownToReciever || !IsUserSender && personalmessage.IsMessageShownToSender)
+                {
+                    Db.PersonalMessages.Remove(personalmessage);
+                }
+                else
+                {
+                    if (!IsUserSender)
+                        personalmessage.IsMessageShownToReciever = false;
+                    else
+                        personalmessage.IsMessageShownToSender = false;
+                }
+                return SaveData(Db);
+            }
         }
 
         public bool DeleteSelectedForumMessage()
         {
             throw new NotImplementedException();
+        }
+
+        public bool IsStorageEmpty()
+        {
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                return !Db.Users.Any();
+            }
         }
     }
 }

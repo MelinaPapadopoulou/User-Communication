@@ -1,9 +1,5 @@
-﻿using Excercise1;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Excercise1
 {
@@ -28,17 +24,18 @@ namespace Excercise1
                     Console.Clear();
                     Console.CursorVisible = false;
                     string selecteditem = "";
+
                     switch (ActiveUser.UsersPrivilege)
                     {
 
                         case Privilege.guest:
-                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader);
+                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
                             break;
                         case Privilege.user:
-                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader);
+                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
                             break;
                         case Privilege.admin:
-                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Update User", "Delete User", "Create User", "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader);
+                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Update User", "Delete User", "Create User", "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
                             break;
                     }
                     switch (selecteditem)
@@ -80,7 +77,7 @@ namespace Excercise1
             string messageselection;
             while (true)
             {
-                messageselection = MainMenuSelection.VerticalMenu(new List<string> { "Send Message", "Sent", "Recieved", "Delete Message", "Back" }, Headers.MessageMenuHeader);
+                messageselection = MainMenuSelection.VerticalMenu(new List<string> { "Send Message", "Sent", "Recieved", "Delete Message", "Back" }, Headers.MessageMenuHeader).NameOfChoice;
                 switch (messageselection)
                 {
                     case "Send Message":
@@ -93,7 +90,7 @@ namespace Excercise1
                         MainActions.ShowRecieved(ActiveUser.UserId);
                         return;
                     case "Delete Message":
-                        MainActions.DeleteMessage(ActiveUser.UserId);
+                        MainActions.DeleteMessage(ActiveUser);
                         return;
                     case "Back":
                         return;

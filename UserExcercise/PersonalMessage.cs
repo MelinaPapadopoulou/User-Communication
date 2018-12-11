@@ -14,12 +14,16 @@ namespace Excercise1
         public int SenderID { get; set; }
         public DateTime DateCreated { get; set; }
         public string MessageText { get; set; }
+        public bool IsMessageShownToReciever { get; set; }
+        public bool IsMessageShownToSender { get; set; }
 
         public virtual User Sender { get; set; }
         public virtual User Reciever { get; set; }
 
         public PersonalMessage()
         {
+            IsMessageShownToSender = true;
+            IsMessageShownToReciever = true;
             DateCreated = DateTime.Now;
         }
     }

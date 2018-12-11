@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Excercise1
 {
@@ -108,7 +106,7 @@ namespace Excercise1
         {
             string[] usersArray = File.ReadAllLines(PATH + USERNAME);
             List<string> userlist = usersArray.OfType<string>().ToList();
-            int line = FindLineOfUser(UserToUpdate.Username);
+            int line = FindLineOfUser(UserToUpdate.UserId);
             userlist[line] = UserToUpdate.Username + "," + UserToUpdate.Password + "," + UserToUpdate.UsersPrivilege + "," + UserToUpdate.UserId + Environment.NewLine;
             File.WriteAllLines(path, userlist);
             return true;
@@ -119,14 +117,14 @@ namespace Excercise1
             UserToUpdate.UsersPrivilege = NewPrivilege;
             return CommitChanges(UserToUpdate, path);
         }
-        public int FindLineOfUser(string username)
+        public int FindLineOfUser(int userid)
         {
             List<string> usersList = new List<string>(File.ReadAllLines(PATH + USERNAME));
             int line = 0;
             List<User> tobeupdated = DataProvider.ReadUsers();
             foreach (User user in tobeupdated)
             {
-                if (user.Username == username)
+                if (user.UserId== userid)
                 {
                     return line;
                 }
@@ -164,38 +162,64 @@ namespace Excercise1
             {
                 return ReadForumMessages().Select(fm => fm.ForumMessageID).Max() + 1;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return 1;
             }
         }
 
-        public bool DeleteSelectedUser(string UserToDelete)
+        public bool DeleteSelectedUser(User UserToDelete)
         {
-            bool flag = false;
             List<string> usersList = new List<string>(File.ReadAllLines(PATH + USERNAME));
-            int line = FindLineOfUser(UserToDelete);
-            if (line>-1)
-            {
-                usersList.RemoveAt(line);
-                File.WriteAllLines(PATH + USERNAME, usersList);
-                flag = true;
-                Console.WriteLine($"User {UserToDelete} has been deleted succesfully!");
-                return flag;
-            }
-            Console.WriteLine("Unsuccessful Action!");
-            Console.ReadKey();
-            return flag;
+            int line=FindLineOfUser(UserToDelete.UserId);
+            usersList.RemoveAt(line);
+            File.WriteAllLines(PATH + USERNAME, usersList);
+            Console.WriteLine($"User has been deleted succesfully!");
+            return true;
         }
 
-        public bool DeleteSelectedPersonalMessage()
+        public bool DeleteSelectedPersonalMessage(PersonalMessage personalmessage, bool IsUserSender)
         {
-            throw new NotImplementedException();
+            if (IsUserSender && !personalmessage.IsMessageShownToReciever || !IsUserSender && personalmessage.IsMessageShownToSender)
+            {
+                List<string> ListOfMessages = new List<string>(File.ReadAllLines(PATH + PERSONAL_MESSAGES));
+                int messageposition = 0;
+                int line = -1;
+                foreach (string personalMessage in ListOfMessages)
+                {
+                    string[] messagePart = personalMessage.Split(',');
+                    if (messagePart[3] == personalmessage.MessageText)
+                    {
+                        line = messageposition;
+                        break;
+                    }
+                    messageposition++;
+                }
+                if (line != -1)
+                {
+                    ListOfMessages.RemoveAt(line);
+                    File.WriteAllLines(PATH + PERSONAL_MESSAGES, ListOfMessages);
+                    return true;
+                }
+            }
+            else
+            {
+                if (!IsUserSender)
+                    personalmessage.IsMessageShownToReciever = false;
+                else
+                    personalmessage.IsMessageShownToSender = false;
+            }
+            return false;
         }
 
         public bool DeleteSelectedForumMessage()
         {
             throw new NotImplementedException();
+        }
+
+        public bool IsStorageEmpty()
+        {
+            return File.Exists(PATH + USERNAME) && (new FileInfo(PATH + USERNAME).Length > 0);
         }
     }
 }
