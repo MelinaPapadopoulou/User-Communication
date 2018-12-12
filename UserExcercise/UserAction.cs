@@ -20,8 +20,8 @@ namespace Excercise1
         public void ShowDetails(User ActiveUser)
         {
             Console.Clear();
-            Console.WriteLine("Here it is!");
-            Console.WriteLine(ActiveUser.Username + " " + ActiveUser.Password + " " + ActiveUser.UsersPrivilege.ToString("g"));
+            Console.WriteLine("Details");
+            Console.WriteLine("Username : " + ActiveUser.Username + Environment.NewLine+ "Password : " + ActiveUser.Password + Environment.NewLine +"As : " + ActiveUser.UsersPrivilege.ToString("g"));
             Console.ReadKey();
             return;
         }
@@ -236,9 +236,9 @@ namespace Excercise1
             return;
         }
 
-        public void DeleteMessage(User ActiveUser)
+        public void DeleteMessage(User ActiveUser,bool IsSender)
         {
-            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages();
+            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages(ActiveUser, IsSender);
             List<string> MessageTextList = new List<string>();
             foreach (PersonalMessage message in messageList)
             {

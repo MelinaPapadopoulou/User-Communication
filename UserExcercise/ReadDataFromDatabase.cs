@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace Excercise1
@@ -16,11 +15,22 @@ namespace Excercise1
             }
         }
 
-        public List<PersonalMessage> ReadPersonalMessages()
+        public List<PersonalMessage> ReadPersonalMessages(User ActiveUser, bool IsUserSender)
         {
             using (DataBaseClass Db = new DataBaseClass())
             {
-                return Db.PersonalMessages.ToList();
+                if (IsUserSender)
+                {
+                    return Db.PersonalMessages
+                         .Where(s => s.SenderID == ActiveUser.UserId)
+                         .ToList();
+                }
+                else
+                {
+                    return Db.PersonalMessages
+                        .Where(r => r.RecieverID == ActiveUser.UserId)
+                        .ToList();
+                }
             }
         }
 
@@ -43,15 +53,15 @@ namespace Excercise1
 
         public bool SaveData(DataBaseClass Db)
         {
-                try
-                {
-                    return Db.SaveChanges() > 0;
-                }
-                catch (Exception e)
-                {
-                    Debug.Write("Could not save to database: " + e.StackTrace);
-                    return false;
-                }
+            try
+            {
+                return Db.SaveChanges() > 0;
+            }
+            catch (Exception e)
+            {
+                Debug.Write("Could not save to database: " + e.StackTrace);
+                return false;
+            }
         }
 
         public bool CreatePersonalMessage(PersonalMessage personalMessage)
@@ -114,7 +124,8 @@ namespace Excercise1
             {
                 if (IsUserSender && !personalmessage.IsMessageShownToReciever || !IsUserSender && personalmessage.IsMessageShownToSender)
                 {
-                    Db.PersonalMessages.Remove(personalmessage);
+                    PersonalMessage pm = new PersonalMessage() { PersonalMessageId = personalmessage.PersonalMessageId };
+                    Db.PersonalMessages.Remove(pm);
                 }
                 else
                 {
@@ -129,7 +140,12 @@ namespace Excercise1
 
         public bool DeleteSelectedForumMessage()
         {
-            throw new NotImplementedException();
+            throw new Exception();
+            //using (DataBaseClass Db = new DataBaseClass())
+            //{
+            //    Db.ForumMessages.Remove(forumMessage);
+            //    return SaveData(Db);
+            //}
         }
 
         public bool IsStorageEmpty()

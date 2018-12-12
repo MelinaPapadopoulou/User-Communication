@@ -13,7 +13,7 @@ namespace Excercise1
 
         // Read
         List<User> ReadUsers();
-        List<PersonalMessage> ReadPersonalMessages();
+        List<PersonalMessage> ReadPersonalMessages(User ActiveUser,bool IsUserSender);
         List<ForumMessage> ReadForumMessages();
 
         // Update

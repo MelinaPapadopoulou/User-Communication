@@ -96,6 +96,10 @@
     <Compile Include="Migrations\201812081211399_FixingUpdateUsersPrivilege.Designer.cs">
       <DependentUpon>201812081211399_FixingUpdateUsersPrivilege.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812120822331_FixingUsersConnectionToDatabase.cs" />
+    <Compile Include="Migrations\201812120822331_FixingUsersConnectionToDatabase.Designer.cs">
+      <DependentUpon>201812120822331_FixingUsersConnectionToDatabase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Database Configurations\PersonalMessagesTableConfiguration.cs" />
     <Compile Include="ReadDataFromDatabase.cs" />
@@ -153,6 +157,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812081211399_FixingUpdateUsersPrivilege.resx">
       <DependentUpon>201812081211399_FixingUpdateUsersPrivilege.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812120822331_FixingUsersConnectionToDatabase.resx">
+      <DependentUpon>201812120822331_FixingUsersConnectionToDatabase.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

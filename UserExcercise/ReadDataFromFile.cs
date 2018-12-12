@@ -28,17 +28,18 @@ namespace Excercise1
             }
             return ListOfUsers;
         }
-
-        public List<PersonalMessage> ReadPersonalMessages()
+        //gurizw PersonalMessage alla egw ta epilegw se strings
+        public List<PersonalMessage> ReadPersonalMessages(User ActiveUser, bool IsUserSender)
         {
-            string[] lines = File.ReadAllLines(PATH + PERSONAL_MESSAGES);
-            List<PersonalMessage> ListOfMessages = new List<PersonalMessage>();
-            foreach (string line in lines)
+            if (IsUserSender)
             {
-                string[] linesPart = line.Split(',');
-                ListOfMessages.Add(new PersonalMessage() { SenderID = int.Parse(linesPart[1]), RecieverID = int.Parse(linesPart[2]), MessageText = linesPart[3] });
+                List< messages = File.ReadAllLines(PATH + PERSONAL_MESSAGES).Select(l => l.Split(',')[3]).Where(l => int.Parse(l.Split(',')[1]) == ActiveUser.UserId).ToList();
             }
-            return ListOfMessages;
+            else
+            {
+                string[] messages = File.ReadAllLines(PATH + PERSONAL_MESSAGES).Select(l => l.Split(',')[3]).Where(l => int.Parse(l.Split(',')[2]) == ActiveUser.UserId).ToArray();
+            }
+            return messages
         }
 
         public List<ForumMessage> ReadForumMessages()
@@ -124,7 +125,7 @@ namespace Excercise1
             List<User> tobeupdated = DataProvider.ReadUsers();
             foreach (User user in tobeupdated)
             {
-                if (user.UserId== userid)
+                if (user.UserId == userid)
                 {
                     return line;
                 }
@@ -149,7 +150,10 @@ namespace Excercise1
         {
             try
             {
-                return ReadPersonalMessages().Select(pm => pm.PersonalMessageId).Max() + 1;
+                return File
+                    .ReadAllLines(PATH + PERSONAL_MESSAGES)
+                    .Select(l => int.Parse(l.Split(',')[4]))
+                    .Max() + 1;
             }
             catch (Exception e)
             {
@@ -171,7 +175,7 @@ namespace Excercise1
         public bool DeleteSelectedUser(User UserToDelete)
         {
             List<string> usersList = new List<string>(File.ReadAllLines(PATH + USERNAME));
-            int line=FindLineOfUser(UserToDelete.UserId);
+            int line = FindLineOfUser(UserToDelete.UserId);
             usersList.RemoveAt(line);
             File.WriteAllLines(PATH + USERNAME, usersList);
             Console.WriteLine($"User has been deleted succesfully!");

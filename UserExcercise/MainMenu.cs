@@ -77,21 +77,24 @@ namespace Excercise1
             string messageselection;
             while (true)
             {
-                messageselection = MainMenuSelection.VerticalMenu(new List<string> { "Send Message", "Sent", "Recieved", "Delete Message", "Back" }, Headers.MessageMenuHeader).NameOfChoice;
+                messageselection = MainMenuSelection.VerticalMenu(new List<string> { "Send Message", "Sent", "Recieved", "Delete Sent Message", "Delete Recieved Message", "Back" }, Headers.MessageMenuHeader).NameOfChoice;
                 switch (messageselection)
                 {
                     case "Send Message":
                         MainActions.PersonalMessage(ActiveUser);
-                        return;
+                        break;
                     case "Sent":
                         MainActions.ShowSent(ActiveUser.UserId);
-                        return;
+                        break;
                     case "Recieved":
                         MainActions.ShowRecieved(ActiveUser.UserId);
-                        return;
-                    case "Delete Message":
-                        MainActions.DeleteMessage(ActiveUser);
-                        return;
+                        break;
+                    case "Delete Sent Message":
+                        MainActions.DeleteMessage(ActiveUser, IsSender: true);
+                        break;
+                    case "Delete Recieved Message":
+                        MainActions.DeleteMessage(ActiveUser, IsSender: false);
+                        break;
                     case "Back":
                         return;
                 }
