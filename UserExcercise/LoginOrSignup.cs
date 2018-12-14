@@ -18,9 +18,9 @@ namespace Excercise1
             LoginValidation = new Validlogin();
         }
 
-        public User LoginSignup(IProvideData DataProvider)
+        public User LoginSignup(IProvideData DataProvider,string startingOption= "SignUp")
         {
-            string startingOption;
+            
             startingOption = MainMenuSelection.HorizontalMainMenu(new List<string> { "Login", "SignUp", "Exit" }, Headers.headerw).NameOfChoice;
             Console.Clear();
             if (startingOption == "Exit")
@@ -50,7 +50,7 @@ namespace Excercise1
             return null;
         }
 
-        private string ReadPassword()
+        public string ReadPassword()
         {
             Console.Write("Password: ");
             Console.CursorVisible = true;
@@ -87,7 +87,7 @@ namespace Excercise1
             return password.All(char.IsLetter) || password.All(char.IsNumber);
         }
 
-        private string ReadUsername()
+        public string ReadUsername()
         {
             Console.Write("Username: ");
             Console.CursorVisible = true;

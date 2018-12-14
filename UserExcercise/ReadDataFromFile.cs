@@ -7,7 +7,6 @@ namespace Excercise1
 {
     class ReadDataFromFile : IProvideData
     {
-        IProvideData DataProvider = new ReadDataFromFile();
         private string PATH = @"C:\Users\user\Desktop\";
         const string USERNAME = "Usernames.txt", PERSONAL_MESSAGES = "Personal Messages.txt", FORUM_MESSAGES = "Forum Messages.txt";
 
@@ -28,18 +27,25 @@ namespace Excercise1
             }
             return ListOfUsers;
         }
-        //gurizw PersonalMessage alla egw ta epilegw se strings
+
         public List<PersonalMessage> ReadPersonalMessages(User ActiveUser, bool IsUserSender)
         {
-            if (IsUserSender)
+            return File.ReadAllLines(PATH + PERSONAL_MESSAGES)
+                    .Where(l => int.Parse(l.Split(',')[IsUserSender ? 1 : 2]) == ActiveUser.UserId)
+                    .Select(l => TextToPersonalMessage(l))
+                    .ToList();
+        }
+        private PersonalMessage TextToPersonalMessage(string Line)
+        {
+            string[] Text = Line.Split(',');
+            return new PersonalMessage
             {
-                List< messages = File.ReadAllLines(PATH + PERSONAL_MESSAGES).Select(l => l.Split(',')[3]).Where(l => int.Parse(l.Split(',')[1]) == ActiveUser.UserId).ToList();
-            }
-            else
-            {
-                string[] messages = File.ReadAllLines(PATH + PERSONAL_MESSAGES).Select(l => l.Split(',')[3]).Where(l => int.Parse(l.Split(',')[2]) == ActiveUser.UserId).ToArray();
-            }
-            return messages
+                DateCreated = DateTime.Parse(Text[0]),
+                SenderID = int.Parse(Text[1]),
+                RecieverID = int.Parse(Text[2]),
+                MessageText = Text[3],
+                PersonalMessageId = int.Parse(Text[4])
+            };
         }
 
         public List<ForumMessage> ReadForumMessages()
@@ -122,7 +128,7 @@ namespace Excercise1
         {
             List<string> usersList = new List<string>(File.ReadAllLines(PATH + USERNAME));
             int line = 0;
-            List<User> tobeupdated = DataProvider.ReadUsers();
+            List<User> tobeupdated = ReadUsers();
             foreach (User user in tobeupdated)
             {
                 if (user.UserId == userid)
@@ -223,7 +229,7 @@ namespace Excercise1
 
         public bool IsStorageEmpty()
         {
-            return File.Exists(PATH + USERNAME) && (new FileInfo(PATH + USERNAME).Length > 0);
+            return File.Exists(PATH + USERNAME) && !(new FileInfo(PATH + USERNAME).Length > 0);
         }
     }
 }

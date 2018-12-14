@@ -21,7 +21,7 @@ namespace Excercise1
         {
             Console.Clear();
             Console.WriteLine("Details");
-            Console.WriteLine("Username : " + ActiveUser.Username + Environment.NewLine+ "Password : " + ActiveUser.Password + Environment.NewLine +"As : " + ActiveUser.UsersPrivilege.ToString("g"));
+            Console.WriteLine("Username : " + ActiveUser.Username + Environment.NewLine + "Password : " + ActiveUser.Password + Environment.NewLine + "As : " + ActiveUser.UsersPrivilege.ToString("g"));
             Console.ReadKey();
             return;
         }
@@ -38,7 +38,6 @@ namespace Excercise1
             {
                 ListOfPossibleUsers.Add("Back");
                 string UserToBeUpdated = MainMenuSelection.VerticalMenu(ListOfPossibleUsers).NameOfChoice;
-                User selecteduser = DataProvider.ReadUsers().Single(us => us.Username == UserToBeUpdated);
                 List<User> ListOfAllUsers = DataProvider.ReadUsers();
                 if (UserToBeUpdated == "Back")
                 {
@@ -46,15 +45,22 @@ namespace Excercise1
                 }
                 else
                 {
-                    Privilege NewUserPrivilege = (Privilege)MainMenuSelection.VerticalMenu(new List<string> { "admin", "user" , "guest"}, $"Choose the privileges of {selecteduser.Username}").IndexOfChoice;
+                    User selecteduser = DataProvider.ReadUsers().Single(us => us.Username == UserToBeUpdated);
+                    Privilege NewUserPrivilege = (Privilege)MainMenuSelection.VerticalMenu(new List<string> { "admin", "user", "guest" }, $"Choose the privileges of {selecteduser.Username}").IndexOfChoice;
                     DataProvider.UpdateUserAccess(selecteduser, NewUserPrivilege);
                 }
             }
         }
 
-        public void CreateUser()
+        public void CreateUser(IProvideData DataProvider)
         {
-            User u2 = new User();
+            LoginOrSignup CreateNewUser = new LoginOrSignup(DataProvider);
+                User u2 = new User() {
+                    Username = CreateNewUser.ReadUsername(),
+                    Password = CreateNewUser.ReadPassword(),
+                    UsersPrivilege = Privilege.user
+                };
+            DataProvider.CreateUser(u2);
             Console.WriteLine($"User \"{u2.Username}\" has been created!");
         }
 
@@ -79,7 +85,7 @@ namespace Excercise1
                     User selecteduser = DataProvider.ReadUsers().Single(us => us.Username == userToDelete);
                     DataProvider.DeleteSelectedUser(selecteduser);
                 }
-                
+
             }
         }
         public void ForumMessage(User sender)
@@ -162,39 +168,49 @@ namespace Excercise1
             Console.WriteLine("Send your message!");
             do
             {
-                messagekey = Console.ReadKey(true);
-                if (messagekey.Key != ConsoleKey.Backspace && messagekey.Key != ConsoleKey.Enter)
+                do
                 {
-                    Console.Clear();
-                    messageText += messagekey.KeyChar;
-                    remainingCharacters--;
-                    Console.Write(messageText + $"\n\n{remainingCharacters}/{MaxCharacters}");
-                    Console.SetCursorPosition(messageText.Length, 0);
-                }
-                else if (messagekey.Key == ConsoleKey.Backspace && messageText.Length > 0)
+                    messagekey = Console.ReadKey(true);
+                    Console.CursorVisible = true;
+                    if (messagekey.Key != ConsoleKey.Backspace && messagekey.Key != ConsoleKey.Enter)
+                    {
+                        Console.Clear();
+                        messageText += messagekey.KeyChar;
+                        remainingCharacters--;
+                        Console.Write(messageText + $"\n\n{remainingCharacters}/{MaxCharacters}");
+                        Console.SetCursorPosition(messageText.Length, 0);
+                    }
+                    else if (messagekey.Key == ConsoleKey.Backspace && messageText.Length > 0)
+                    {
+                        messageText = messageText.Remove(messageText.Length - 1);
+                        remainingCharacters++;
+                        Console.Clear();
+                        Console.Write(messageText + $"\n\n{remainingCharacters}/{MaxCharacters}\n");
+                    }
+                } while (remainingCharacters > 0 && messagekey.Key != ConsoleKey.Enter);
+                if (String.IsNullOrWhiteSpace(messageText))
                 {
-                    messageText = messageText.Remove(messageText.Length - 1);
-                    remainingCharacters++;
-                    Console.Clear();
-                    Console.Write(messageText + $"\n\n{remainingCharacters}/{MaxCharacters}");
+                    messageText = "";
+                    remainingCharacters = 250;
+                    Console.WriteLine("\nNo empty messages permitted!\nWrite down your message: ");
                 }
-            } while (remainingCharacters > 0 && messagekey.Key != ConsoleKey.Enter);
+            } while (String.IsNullOrWhiteSpace(messageText));
             return messageText;
         }
 
-        public void ShowSent(int userid)
+        public void ShowSent(User ActiveUser, bool IsUserSender)
         {
-            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages();
+            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages(ActiveUser, IsUserSender);
             List<string> sentMessages = new List<string>();
             foreach (PersonalMessage message in messageList)
             {
-                if (message.SenderID == userid)
+                if (message.IsMessageShownToSender)
                 {
                     Debug.WriteLine("Mpikame!!!");
                     sentMessages.Add(message.MessageText);
                 }
             }
-            if (sentMessages.Count == 0)
+            if (IsListEmpty(sentMessages))
             {
                 Console.WriteLine("No sent messages!");
             }
@@ -209,19 +225,18 @@ namespace Excercise1
             return;
         }
 
-        public void ShowRecieved(int userid)
+        public void ShowRecieved(User ActiveUser, bool IsUserSender)
         {
-            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages();
+            List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages(ActiveUser, IsUserSender);
             List<string> recievedMessages = new List<string>();
-            List<int> senders = new List<int>();
             foreach (PersonalMessage message in messageList)
             {
-                if (message.RecieverID == userid)
+                if (message.IsMessageShownToReciever)
                 {
                     recievedMessages.Add(message.MessageText);
                 }
             }
-            if (recievedMessages.Count == 0)
+            if (IsListEmpty(recievedMessages))
             {
                 Console.WriteLine("No recieved messages!");
             }
@@ -236,7 +251,7 @@ namespace Excercise1
             return;
         }
 
-        public void DeleteMessage(User ActiveUser,bool IsSender)
+        public void DeleteMessage(User ActiveUser, bool IsSender)
         {
             List<PersonalMessage> messageList = DataProvider.ReadPersonalMessages(ActiveUser, IsSender);
             List<string> MessageTextList = new List<string>();
@@ -264,7 +279,6 @@ namespace Excercise1
                 }
                 else
                 {
-                    // Gia na apofugw thn foreach na kanw to menu na stelnei int kai oxi string
                     if (messageList[index].SenderID == ActiveUser.UserId)
                         IsUserSender = true;
                     else

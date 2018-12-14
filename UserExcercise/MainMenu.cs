@@ -35,7 +35,7 @@ namespace Excercise1
                             selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
                             break;
                         case Privilege.admin:
-                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Update User", "Delete User", "Create User", "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
+                            selecteditem = MainMenuSelection.VerticalMenu(new List<string> { "Update User", "Disable User", "Create User", "Show Details", "Our Space", "Messages", "Log Out", "Exit" }, Headers.MainMenuHeader).NameOfChoice;
                             break;
                     }
                     switch (selecteditem)
@@ -55,9 +55,9 @@ namespace Excercise1
                             MainActions.ShowDetails(ActiveUser);
                             break;
                         case "Create User":
-                            MainActions.CreateUser();
+                            MainActions.CreateUser(DataProvider);
                             break;
-                        case "Delete User":
+                        case "Disable User":
                             MainActions.DeleteUser(ActiveUser.Username);
                             break; ;
                         case "Update User":
@@ -84,10 +84,10 @@ namespace Excercise1
                         MainActions.PersonalMessage(ActiveUser);
                         break;
                     case "Sent":
-                        MainActions.ShowSent(ActiveUser.UserId);
+                        MainActions.ShowSent(ActiveUser,IsUserSender:true);
                         break;
                     case "Recieved":
-                        MainActions.ShowRecieved(ActiveUser.UserId);
+                        MainActions.ShowRecieved(ActiveUser,IsUserSender:false);
                         break;
                     case "Delete Sent Message":
                         MainActions.DeleteMessage(ActiveUser, IsSender: true);

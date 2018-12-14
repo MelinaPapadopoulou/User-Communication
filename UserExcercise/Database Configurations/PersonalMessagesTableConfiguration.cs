@@ -6,6 +6,8 @@ namespace Excercise1
     {
         internal PersonalMessagesTableConfiguration()
         {
+            Property(pm => pm.MessageText).IsRequired();
+
             HasRequired(PM => PM.Sender)
                 .WithMany(S => S.SentMessages)
                 .HasForeignKey(PM => PM.SenderID)
@@ -15,6 +17,7 @@ namespace Excercise1
                 .WithMany(S => S.RecievedMessages)
                 .HasForeignKey(PM => PM.RecieverID)
                 .WillCascadeOnDelete(false);
+            
         }
     }
 }

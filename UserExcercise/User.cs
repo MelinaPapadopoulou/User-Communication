@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Excercise1
 {
-    public enum Privilege { admin, user, guest }
+    public enum Privilege { admin, user, guest, disabled }
     class User
     {
         public int UserId { get; set; }

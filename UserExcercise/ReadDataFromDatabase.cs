@@ -38,7 +38,7 @@ namespace Excercise1
         {
             using (DataBaseClass Db = new DataBaseClass())
             {
-                return Db.Users.ToList();
+                return Db.Users.Where(user=>user.UsersPrivilege!=Privilege.disabled).ToList();
             }
         }
 
@@ -113,7 +113,35 @@ namespace Excercise1
         {
             using (DataBaseClass Db = new DataBaseClass())
             {
-                Db.Users.Remove(UserToDelete);
+                User user = Db.Users.Single(u=>u.UserId == UserToDelete.UserId);
+                DeleteAllMessages(user);
+                user.Username += "*";
+                user.UsersPrivilege = Privilege.disabled;
+
+                
+                return SaveData(Db);
+            }
+        }
+
+        private bool DeleteAllMessages(User UserToDelete)
+        {
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                User user = Db.Users.SingleOrDefault(u => u.UserId == UserToDelete.UserId);
+                List<PersonalMessage>  pmslist = Db.PersonalMessages.Where(pm => pm.SenderID == user.UserId || pm.RecieverID==user.UserId).ToList();
+                foreach(PersonalMessage pm in pmslist)
+                {
+                    if (pm.SenderID==user.UserId)
+                    {
+                        pm.IsMessageShownToSender = false;
+                        DeleteSelectedPersonalMessage(pm, IsUserSender: true);
+                    }
+                    else
+                    {
+                        pm.IsMessageShownToReciever = false;
+                        DeleteSelectedPersonalMessage(pm, IsUserSender: false);
+                    }
+                }
                 return SaveData(Db);
             }
         }
@@ -122,17 +150,17 @@ namespace Excercise1
         {
             using (DataBaseClass Db = new DataBaseClass())
             {
-                if (IsUserSender && !personalmessage.IsMessageShownToReciever || !IsUserSender && personalmessage.IsMessageShownToSender)
-                {
-                    PersonalMessage pm = new PersonalMessage() { PersonalMessageId = personalmessage.PersonalMessageId };
+                PersonalMessage pm = Db.PersonalMessages.Single(Perm => Perm.PersonalMessageId == personalmessage.PersonalMessageId);
+                if (IsUserSender && !personalmessage.IsMessageShownToReciever || !IsUserSender && !personalmessage.IsMessageShownToSender)
+                {                    
                     Db.PersonalMessages.Remove(pm);
                 }
                 else
                 {
                     if (!IsUserSender)
-                        personalmessage.IsMessageShownToReciever = false;
+                        pm.IsMessageShownToReciever = false;
                     else
-                        personalmessage.IsMessageShownToSender = false;
+                        pm.IsMessageShownToSender = false;
                 }
                 return SaveData(Db);
             }

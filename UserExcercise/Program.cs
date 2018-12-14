@@ -11,7 +11,7 @@ namespace Excercise1
 
         static void Main(string[] args)
         {
-            IProvideData DataReader = new ReadDataFromDatabase();
+            IProvideData DataReader = new ReadDataFromFile();
             LoginOrSignup LogOrSign = new LoginOrSignup(DataReader);
 
             while (true)

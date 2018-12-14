@@ -6,6 +6,8 @@ namespace Excercise1
     {
         internal ForumMessagesTableConfiguration()
         {
+            Property(fm => fm.MessageText).IsRequired();
+
             HasRequired(FM => FM.Sender)
                 .WithMany(S => S.ForumMessages)
                 .HasForeignKey(PM => PM.SenderID);
