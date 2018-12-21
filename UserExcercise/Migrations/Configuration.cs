@@ -5,14 +5,14 @@ namespace UserExcercise.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Excercise1.DataBaseClass>
+    internal sealed class Configuration : DbMigrationsConfiguration<UserExcercise.DataBaseClass>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Excercise1.DataBaseClass context)
+        protected override void Seed(UserExcercise.DataBaseClass context)
         {
             //  This method will be called after migrating to the latest version.
 

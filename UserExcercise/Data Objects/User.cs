@@ -6,7 +6,7 @@ using System.Linq;
 
 
 
-namespace Excercise1
+namespace UserExcercise
 {
     public enum Privilege { admin, user, guest, disabled }
     class User

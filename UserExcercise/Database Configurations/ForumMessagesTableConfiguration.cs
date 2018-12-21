@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity.ModelConfiguration;
 
-namespace Excercise1
+namespace UserExcercise
 {
     internal class ForumMessagesTableConfiguration : EntityTypeConfiguration<ForumMessage>
     {

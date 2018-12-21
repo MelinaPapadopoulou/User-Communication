@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Excercise1
+namespace UserExcercise
 {
     class ReadDataFromFile : IProvideData
     {
@@ -126,7 +126,6 @@ namespace Excercise1
         }
         public int FindLineOfUser(int userid)
         {
-            List<string> usersList = new List<string>(File.ReadAllLines(PATH + USERNAME));
             int line = 0;
             List<User> tobeupdated = ReadUsers();
             foreach (User user in tobeupdated)
@@ -185,6 +184,7 @@ namespace Excercise1
             usersList.RemoveAt(line);
             File.WriteAllLines(PATH + USERNAME, usersList);
             Console.WriteLine($"User has been deleted succesfully!");
+            Console.ReadKey();
             return true;
         }
 
@@ -230,6 +230,16 @@ namespace Excercise1
         public bool IsStorageEmpty()
         {
             return File.Exists(PATH + USERNAME) && !(new FileInfo(PATH + USERNAME).Length > 0);
+        }
+
+        public bool UpdateMessageAsRead(int pm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ForumMessage> GetLastForumMessages(int NumberOfMessages = 20)
+        {
+            throw new NotImplementedException();
         }
     }
 }

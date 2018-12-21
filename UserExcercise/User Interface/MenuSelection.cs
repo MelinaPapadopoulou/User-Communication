@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Excercise1
+namespace UserExcercise
 {
-    class MenuSelection
+    class SelectionMenu
     {
         public struct UserChoice
         {
@@ -14,7 +14,7 @@ namespace Excercise1
             public int IndexOfChoice;
         }
 
-        public UserChoice HorizontalMainMenu(List<string> list, string Header = "")
+        public static UserChoice Horizontal(List<string> list, string Header = "")
         {
             int index = 0;
             ConsoleKeyInfo ckey;
@@ -66,7 +66,8 @@ namespace Excercise1
             } while (ckey.Key != ConsoleKey.Enter);
             return new UserChoice() { NameOfChoice = list[index], IndexOfChoice = index };
         }
-        public UserChoice VerticalMenu(List<string> list, string Header = "")
+
+        public static UserChoice Vertical(List<string> list, string Header = "")
         {
 
             Console.CursorVisible = false;

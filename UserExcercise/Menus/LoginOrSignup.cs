@@ -3,25 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Excercise1
+namespace UserExcercise
 {
     class LoginOrSignup
     {
         IProvideData DataProvider;
-        MenuSelection MainMenuSelection;
-        Validlogin LoginValidation;
+        SelectionMenu SelectionMenu;
 
         public LoginOrSignup(IProvideData dataprovider)
         {
-            MainMenuSelection = new MenuSelection();
+            SelectionMenu = new SelectionMenu();
             DataProvider = dataprovider;
-            LoginValidation = new Validlogin();
         }
 
         public User LoginSignup(IProvideData DataProvider,string startingOption= "SignUp")
         {
             
-            startingOption = MainMenuSelection.HorizontalMainMenu(new List<string> { "Login", "SignUp", "Exit" }, Headers.headerw).NameOfChoice;
+            startingOption = SelectionMenu.Horizontal(new List<string> { "Login", "SignUp", "Exit" }, Headers.headerw).NameOfChoice;
             Console.Clear();
             if (startingOption == "Exit")
             {
@@ -45,7 +43,20 @@ namespace Excercise1
             }
             else if (startingOption == "Login")
             {
-                return LoginValidation.ValidLogin(DataProvider, GivenUsername, GivenPassword);
+                return ValidLogin(GivenUsername, GivenPassword);
+            }
+            return null;
+        }
+
+        public User ValidLogin( string username, string password)
+        {
+            List<User> currentlist = DataProvider.ReadUsers();
+            foreach (User user in currentlist)
+            {
+                if (username == user.Username && password == user.Password)
+                {
+                    return user;
+                }
             }
             return null;
         }

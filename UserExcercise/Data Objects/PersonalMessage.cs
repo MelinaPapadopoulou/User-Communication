@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Excercise1
+namespace UserExcercise
 {
     class PersonalMessage
     {
@@ -16,15 +16,23 @@ namespace Excercise1
         public string MessageText { get; set; }
         public bool IsMessageShownToReciever { get; set; }
         public bool IsMessageShownToSender { get; set; }
+        public bool IsMessageRead { get; set; }
+        public string MessageTitle { get; set; }
 
         public virtual User Sender { get; set; }
         public virtual User Reciever { get; set; }
 
         public PersonalMessage()
         {
+            IsMessageRead = false;
             IsMessageShownToSender = true;
             IsMessageShownToReciever = true;
             DateCreated = DateTime.Now;
         }
+    }
+
+    public struct MessageContent
+    {
+        public string Title, Body;
     }
 }

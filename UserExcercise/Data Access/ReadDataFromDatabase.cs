@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Data.Entity;
 
-namespace Excercise1
+namespace UserExcercise
 {
     class ReadDataFromDatabase : IProvideData
     {
@@ -15,6 +16,18 @@ namespace Excercise1
             }
         }
 
+        public List<ForumMessage> GetLastForumMessages(int NumberOfMessages)
+        {
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                return Db.ForumMessages
+                    .Include(fm => fm.Sender)
+                    .OrderByDescending(fm=>fm.ForumMessageID)
+                    .Take(NumberOfMessages)
+                    .ToList();
+            }
+        }
+
         public List<PersonalMessage> ReadPersonalMessages(User ActiveUser, bool IsUserSender)
         {
             using (DataBaseClass Db = new DataBaseClass())
@@ -22,17 +35,18 @@ namespace Excercise1
                 if (IsUserSender)
                 {
                     return Db.PersonalMessages
-                         .Where(s => s.SenderID == ActiveUser.UserId)
+                         .Where(s => s.SenderID == ActiveUser.UserId && s.IsMessageShownToSender)
                          .ToList();
                 }
                 else
                 {
                     return Db.PersonalMessages
-                        .Where(r => r.RecieverID == ActiveUser.UserId)
+                        .Where(r => r.RecieverID == ActiveUser.UserId && r.IsMessageShownToReciever)
                         .ToList();
                 }
             }
         }
+
 
         public List<User> ReadUsers()
         {
@@ -183,5 +197,16 @@ namespace Excercise1
                 return !Db.Users.Any();
             }
         }
+
+        public bool UpdateMessageAsRead(int pmid)
+        {
+            using (DataBaseClass Db = new DataBaseClass())
+            {
+                Db.PersonalMessages.Single(pm => pm.PersonalMessageId == pmid).IsMessageRead = true;
+                return SaveData(Db);
+            }
+        }
+
+       
     }
 }

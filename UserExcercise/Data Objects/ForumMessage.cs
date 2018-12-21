@@ -2,7 +2,7 @@
 using System.Linq;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Excercise1
+namespace UserExcercise
 {
     class ForumMessage
     {
