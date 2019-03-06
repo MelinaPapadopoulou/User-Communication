@@ -93,12 +93,5 @@ namespace UserExcercise
 
             }
         }
-        
-
-     
-
-        
-
-        
     }
 }

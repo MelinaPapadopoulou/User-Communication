@@ -8,35 +8,7 @@ namespace UserExcercise
 {
     class Headers
     {
-        public const string MelinaHeader = @"
-
-
-+-----+X                     X+-----+-----------------------+----+                      +--------+X                      +--------+-----------------------+
-|     |XX                   XX|     |                       |    |                      |        |XX                     |        |                       |
-|     |XXX                 XXX|     |                       |    |                 XXXXX+        |XXX                    |        |                       |
-|     |XXXX               XXXX|     |                       |    |               XX     XX       |XXXX                   |        |                       |
-|     |XXXXX             XXXXX|     +--------------------+--+    |              X         X      |XXXXX                  |        |                       |
-|     | XXXXX           XXXXX |     |                    |       |              X         X      | XXXXX                 |        |          XXX          |
-|     |  XXXXX         XXXXX  |     |                    |       |               XX     XX       |  XXXXX                |        |         XX XX         |
-|     |   XXXXX       XXXXX   |     |                    |       |                 XXXXX+        |   XXXXX               |        |       XX    XX        |
-|     |    XXXXX     XXXXX    |     |                    |       |                      |        |    XXXXX              |        |      XX      XX       |
-|     |     XXXXX   XXXXX     |     |                    |       |                      |        |     XXXXX             |        |     XX        XX      |
-|     |      XXXXXXXXXXX      |     +-----------------+  |       |                      |        |      XXXXX            |        |    XX          XX     |
-|     |       XXXXXXXX        |     |                 |  |       |              +-------+-+      |       XXXXX           |        |    XXXXXXXXXXXXXXX    |
-|     |                       |     |                 |  |       |              |         |      |        XXXXX          |        |                       |
-|     |                       |     |                 |  |       |              |         |      |         XXXXX         |        |                       |
-|     |                       |     +-----------------+  |       |              |         |      |          XXXXX        |        |                       |
-|     |                       |     |                    |       |              |         |      |           XXXXX       |        |      +----------+     |
-|     |                       |     |                    |       |              |         |      |            XXXXX      |        |      |          |     |
-|     |                       |     |                    |       |              |   X     |      |             XXXXX     |        |      |          |     |
-|     |                       |     |                    |       |              | XXX     |      |              XXXXX    |        |      |          |     |
-|     |                       |     |                    |       |              |XX X     |      |               XXXXX   |        |      |          |     |
-|     |                       |     +--------------------+--+    +----------XXXXX   X     |      |                XXXXX  |        |      |          |     |
-|     |                       |     |                       |                       X     |      |                 XXXXX |        |      |          |     |
-|     |                       |     |           MELINA      |                       X     |      |                  XXXXX|        |      |          |     |
-|     |                       |     |                       |                       X     |      |                   XXXX|        |      |          |     |
-+-----+                       +-----+-----------------------+-----------------XXXXXXX-----+------+                    XXX+--------+------+          +-----+
-";
+        
 
         public const string headerw = @"
 __          ________ _      _____ ____  __  __ ______ 

@@ -21,7 +21,7 @@ namespace UserExcercise
                 // Get the messages
                 List<PersonalMessage> PersonalMessages = GetRecievedMessages(IsUserSender: false);
 
-                // Make the User select one
+                // User select one
                 int indexOfSelectedMessage = SelectionMenu.Vertical(PresentPersonalMessages(PersonalMessages)).IndexOfChoice;
 
                 // Mark it as read

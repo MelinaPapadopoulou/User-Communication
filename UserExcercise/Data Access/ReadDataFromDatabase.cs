@@ -182,12 +182,8 @@ namespace UserExcercise
 
         public bool DeleteSelectedForumMessage()
         {
+            //No delete option
             throw new Exception();
-            //using (DataBaseClass Db = new DataBaseClass())
-            //{
-            //    Db.ForumMessages.Remove(forumMessage);
-            //    return SaveData(Db);
-            //}
         }
 
         public bool IsStorageEmpty()
@@ -206,7 +202,5 @@ namespace UserExcercise
                 return SaveData(Db);
             }
         }
-
-       
     }
 }

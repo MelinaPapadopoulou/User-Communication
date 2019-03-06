@@ -13,7 +13,8 @@ namespace UserExcercise
 
         public virtual User Sender {get; set;}
 
-        public ForumMessage() {
+        public ForumMessage()
+        {
             DateCreated = DateTime.Now;
 
         }
