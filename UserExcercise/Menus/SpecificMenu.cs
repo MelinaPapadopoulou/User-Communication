@@ -84,7 +84,7 @@ namespace UserExcercise
         {
             while (true)
             {
-                ;
+                
                 string SelectedAction = SelectionMenu.Horizontal(new List<string> { SEND_MESSAGE, BACK }, ForumMessageActions.ShowPrevious()).NameOfChoice;
                 switch (SelectedAction)
                 {
